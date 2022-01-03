@@ -10,25 +10,104 @@
 </head>
 <body>
     <div id="toast">
-        <!--Success-->
-        <div class="toast toast--success">
-            <div class="toast__icon">
-                <i class="fa fa-check-circle"></i>
-               
-
-            </div>
-            <div class="toast__body">
-                <h3 class="toast__title">Success</h3>
-                <p class="toast__msg">Xin chào Giang Phan!!!</p>
-            </div>
-            <div class="toast__close">
-                <i class="fa fa-times"></i>
-
-            </div>
-        </div>
+  
 
 
     </div>
+
+    <div>
+        <div onclick="showSuccessToast()" class="btn btn--success">Show Success Toast</div>
+        <div onclick="showErrorToast()" class="btn btn--error">Show Error Toast</div>
+        <div onclick="showInfoToast()" class="btn btn--info">Show Info Toast</div>
+        <div onclick="showWarninfToast()" class="btn btn--warn">Show Warning Toast</div>
+
+    </div>
+
+    <script>
+        function toast({title ='',message='',type='info',duration=300}){
+            const main = document.getElementById('toast');
+            if(main){
+                const toast = document.createElement('div');
+
+                //Auto remove toast Message
+                const autoRemoveId = setTimeout(function(){
+                    main.removeChild(toast);
+                },duration)
+
+                // Click clear toast Message
+                toast.onclick =function (e){
+                    //console.log(e.target)
+                    if(e.target.closest('.toast__close')){
+                        main.removeChild(toast);
+                        clearTimeout(autoRemoveId);
+                    }
+
+                }
+                const icons ={
+                    success: 'fa fa-check-circle',
+                    info: 'fa fa-info-circle',
+                    warning:'fa fa-warning',
+                    error: 'fa fa-exclamation-circle'
+                }
+                const icon = icons[type];
+                const delay = (duration/1000);
+                toast.classList.add('toast', `toast--${type}`);
+                toast.style.animation = `slideInLeft ease 0.4s, fadeOut linear 1.3s ${delay}s forwards`
+                toast.innerHTML=`
+                    <div class="toast__icon">
+                        <i class="${icon}"></i>
+                    </div>
+                    <div class="toast__body">
+                        <h3 class="toast__title">${title }</h3>
+                        <p class="toast__msg">${message}</p>
+                    </div>
+                    <div class="toast__close">
+                        <i class="fa fa-times"></i>
+                    </div>`;
+                main.appendChild(toast);
+                
+            }
+
+        }
+        
+        function showSuccessToast(){
+            console.log("da click");
+            toast({
+                title : 'Success',
+                message: 'Xin chào Giang Phan!!!',
+                type: 'success',
+                duration: 2000
+            })
+        }
+        function showErrorToast(){
+            console.log("da click");
+            toast({
+                title : 'Error',
+                message: 'Có lỗi đăng nhập rồi',
+                type: 'error',
+                duration: 3000
+            })
+        }
+        function showInfoToast(){
+            toast({
+                title : 'Thông tin',
+                message: 'Bạn cần liên hệ hãy gọi 0985.956.777',
+                type: 'info',
+                duration: 3000
+            })
+
+        }
+
+        function showWarninfToast(){
+            toast({
+                title : 'Cảnh báo',
+                message: 'Bạn đã thực hiện sai chức năng',
+                type: 'warning',
+                duration: 3000
+            })
+        }
+       
+    </script>
 
     
 </body>
